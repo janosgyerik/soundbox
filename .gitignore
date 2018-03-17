@@ -1,0 +1,25 @@
+# other
+.DS_Store
+tmp
+
+# Eclipse, Ant, Maven
+bin
+gen
+target
+
+# Android
+local.properties
+
+# release, signing
+/keys/
+
+# Intellij project files
+#*.iml
+#*.ipr
+#*.iws
+.idea
+*.iml
+
+# gradle files
+.gradle
+build
