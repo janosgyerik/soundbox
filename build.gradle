@@ -25,3 +25,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext.storeFilePath = System.getenv('STORE_FILE')
+ext.storePassword = System.getenv('STORE_PASSWORD')
+ext.keyAlias = System.getenv('KEY_ALIAS')
+ext.keyPassword = System.getenv('KEY_PASSWORD')

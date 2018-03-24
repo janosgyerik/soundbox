@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
+
     defaultConfig {
         applicationId "com.janosgyerik.soundbox"
         minSdkVersion 15
@@ -14,10 +15,42 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    flavorDimensions "mode"
+
+    productFlavors {
+        lite {
+            dimension "mode"
+            applicationIdSuffix ".lite"
+            versionNameSuffix "-lite"
+        }
+        full {
+            dimension "mode"
+            applicationIdSuffix ".full"
+            versionNameSuffix "-full"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    if (rootProject.storeFilePath) {
+        signingConfigs {
+            release {
+                storeFile file(rootProject.storeFilePath)
+                storePassword rootProject.storePassword
+                keyAlias rootProject.keyAlias
+                keyPassword rootProject.keyPassword
+            }
+        }
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
