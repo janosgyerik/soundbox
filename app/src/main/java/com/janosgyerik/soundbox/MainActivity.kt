@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             val sectionsLayout = rootView.findViewById<LinearLayout>(R.id.sections)
 
             val opts = BitmapFactory.Options()
-            opts.inDensity = DisplayMetrics.DENSITY_HIGH
+            opts.inDensity = DisplayMetrics.DENSITY_MEDIUM
 
             for (section in sections.sections) {
                 val sectionView = inflater.inflate(R.layout.section, container, false)
