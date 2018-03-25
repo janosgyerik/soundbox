@@ -99,8 +99,10 @@ class MainActivity : AppCompatActivity() {
             val exampleText = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
 
             val sections = SectionManager(Arrays.asList(
+                    //makeDummySection("Secondary weapons", 4),
                     sectionFromAssetDir("files/primary", "Primary weapons"),
-                    makeDummySection("Secondary weapons", 4)))
+                    sectionFromAssetDir("files/secondary", "Secondary weapons")
+            ))
 
             val sectionsLayout = rootView.findViewById<LinearLayout>(R.id.sections)
 
