@@ -1,20 +1,24 @@
 package com.janosgyerik.soundbox
 
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-
+import android.support.v7.app.AppCompatActivity
+import android.view.*
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main.view.*
+import java.util.*
+import android.util.DisplayMetrics
+import android.graphics.BitmapFactory
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,19 +36,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
     }
 
 
@@ -81,10 +78,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            // Show 3 total pages.
-            return 3
+            // Show 1 total pages.
+            return 1
         }
     }
+
+    data class SectionManager(val sections: List<Section>)
+
+    data class Section(val title: String, val buttons: List<SoundButton>)
+
+    data class SoundButton(val resId: Int)
 
     /**
      * A placeholder fragment containing a simple view.
@@ -94,8 +97,47 @@ class MainActivity : AppCompatActivity() {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
+            val exampleText = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
+
+            val sections = SectionManager(Arrays.asList(
+                    makeDummySection("Primary weapons", 3),
+                    makeDummySection("Secondary weapons", 4)))
+
+            val sectionsLayout = rootView.findViewById<LinearLayout>(R.id.sections)
+
+            val opts = BitmapFactory.Options()
+            opts.inDensity = DisplayMetrics.DENSITY_HIGH
+
+            for (section in sections.sections) {
+                val sectionView = inflater.inflate(R.layout.section, container, false)
+                sectionsLayout.addView(sectionView)
+
+                val title = sectionView.findViewById<TextView>(R.id.title)
+                title.text = section.title
+                val typeface = Typeface.createFromAsset(context.assets, "fonts/StarWars.ttf")
+                title.typeface = typeface
+
+                val buttonsLayout = sectionView.findViewById<LinearLayout>(R.id.buttons)
+
+                for (button in section.buttons) {
+                    val imageButton = ImageButton(this.context)
+                    buttonsLayout.addView(imageButton)
+                    val inputStream = context.assets.open("files/primary/rebel_btn.png")
+                    val image = Drawable.createFromResourceStream(resources, null, inputStream, null, opts)
+                    imageButton.setImageDrawable(image)
+                    imageButton.setBackgroundColor(Color.BLACK)
+                }
+            }
+
             return rootView
+        }
+
+        private fun makeDummySection(title: String, count: Int): Section {
+            val buttons = arrayListOf<SoundButton>()
+            for (i in 1..count) {
+                buttons.add(SoundButton(0))
+            }
+            return Section(title, buttons)
         }
 
         companion object {
