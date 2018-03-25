@@ -1,23 +1,22 @@
 package com.janosgyerik.soundbox
 
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import android.util.DisplayMetrics
-import android.graphics.BitmapFactory
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -126,6 +125,15 @@ class MainActivity : AppCompatActivity() {
                     val image = Drawable.createFromResourceStream(resources, null, inputStream, null, opts)
                     imageButton.setImageDrawable(image)
                     imageButton.setBackgroundColor(Color.BLACK)
+
+                    val afd = context.assets.openFd("files/primary/rebel_btn.mp3")
+
+                    imageButton.setOnClickListener { view ->
+                        val mp = MediaPlayer()
+                        mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength())
+                        mp.prepare()
+                        mp.start()
+                    }
                 }
             }
 
