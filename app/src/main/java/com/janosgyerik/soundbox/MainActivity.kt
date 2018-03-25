@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
     data class Section(val title: String, val buttons: List<SoundButton>)
 
-    data class SoundButton(val resId: Int)
+    data class SoundButton(val imagePath: String, val soundPath: String)
 
     /**
      * A placeholder fragment containing a simple view.
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             val exampleText = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
 
             val sections = SectionManager(Arrays.asList(
-                    makeDummySection("Primary weapons", 3),
+                    sectionFromAssetDir("files/primary", "Primary weapons"),
                     makeDummySection("Secondary weapons", 4)))
 
             val sectionsLayout = rootView.findViewById<LinearLayout>(R.id.sections)
@@ -122,12 +122,12 @@ class MainActivity : AppCompatActivity() {
                 for (button in section.buttons) {
                     val imageButton = ImageButton(this.context)
                     buttonsLayout.addView(imageButton)
-                    val inputStream = context.assets.open("files/primary/rebel_btn.png")
+                    val inputStream = context.assets.open(button.imagePath)
                     val image = Drawable.createFromResourceStream(resources, null, inputStream, null, opts)
                     imageButton.setImageDrawable(image)
                     imageButton.setBackgroundColor(Color.BLACK)
 
-                    val afd = context.assets.openFd("files/primary/rebel_btn.mp3")
+                    val afd = context.assets.openFd(button.soundPath)
 
                     imageButton.setOnClickListener { view ->
                         val mp = MediaPlayer()
@@ -144,7 +144,20 @@ class MainActivity : AppCompatActivity() {
         private fun makeDummySection(title: String, count: Int): Section {
             val buttons = arrayListOf<SoundButton>()
             for (i in 1..count) {
-                buttons.add(SoundButton(0))
+                buttons.add(SoundButton("files/primary/rebel_btn.png", "files/primary/rebel_btn.mp3"))
+            }
+            return Section(title, buttons)
+        }
+
+        private fun sectionFromAssetDir(basedir: String, title: String): Section {
+            val buttons = arrayListOf<SoundButton>()
+            for (filename in context.assets.list(basedir)) {
+                if (!filename.endsWith("_btn.png")) {
+                    continue
+                }
+                val imagePath = basedir + "/" + filename
+                val soundPath = basedir + "/" + filename.substring(0, filename.length - 4) + ".mp3"
+                buttons.add(SoundButton(imagePath, soundPath))
             }
             return Section(title, buttons)
         }
