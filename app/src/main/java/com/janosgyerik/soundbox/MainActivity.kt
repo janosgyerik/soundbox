@@ -101,7 +101,8 @@ class MainActivity : AppCompatActivity() {
             val sections = SectionManager(Arrays.asList(
                     //makeDummySection("Secondary weapons", 4),
                     sectionFromAssetDir("files/primary", "Primary weapons"),
-                    sectionFromAssetDir("files/secondary", "Secondary weapons")
+                    sectionFromAssetDir("files/secondary", "Secondary weapons"),
+                    sectionFromAssetDir("files/misc", "Miscellaneous")
             ))
 
             val sectionsLayout = rootView.findViewById<LinearLayout>(R.id.sections)
