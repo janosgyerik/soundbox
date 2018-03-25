@@ -107,13 +107,14 @@ class MainActivity : AppCompatActivity() {
             val opts = BitmapFactory.Options()
             opts.inDensity = DisplayMetrics.DENSITY_MEDIUM
 
+            val typeface = Typeface.createFromAsset(context.assets, "fonts/StarWars.ttf")
+
             for (section in sections.sections) {
                 val sectionView = inflater.inflate(R.layout.section, container, false)
                 sectionsLayout.addView(sectionView)
 
                 val title = sectionView.findViewById<TextView>(R.id.title)
                 title.text = section.title
-                val typeface = Typeface.createFromAsset(context.assets, "fonts/StarWars.ttf")
                 title.typeface = typeface
 
                 val buttonsLayout = sectionView.findViewById<LinearLayout>(R.id.buttons)
