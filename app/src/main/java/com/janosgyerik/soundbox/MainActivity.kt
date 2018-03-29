@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity() {
 
                     imageButton.setOnClickListener { view ->
                         val mp = MediaPlayer()
+                        mp.setOnCompletionListener(MediaPlayer::release)
                         mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength())
                         mp.prepare()
                         mp.start()
